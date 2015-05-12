@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" >
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Title" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
+	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
+	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
+	<style name="Detail" fontName="Arial" fontSize="12"/>
+	<parameter name="imagePath" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT ID_ACTIVIDAD,DESCRIPCION_ACTIVIDAD,case
+when DAYOFWEEK(FECHA) =2 then "LUNES"
+when DAYOFWEEK(FECHA) =3 then "MARTES"
+when DAYOFWEEK(FECHA) =4 then "MIERCOLES"
+when DAYOFWEEK(FECHA) =5 then "JUEVES"
+when DAYOFWEEK(FECHA) =6 then "VIERNES"
+when DAYOFWEEK(FECHA) =7 then "SABADO"
+when DAYOFWEEK(FECHA) =1 then "DOMINGO"
+else '' end
+
+
+  as FECHA,FECHA as FECHA2 ,
+DAYOFWEEK(FECHA) AS NUM
+
+from ACTIVIDAD order by 5]]>
+	</queryString>
+	<field name="ID_ACTIVIDAD" class="java.lang.Integer"/>
+	<field name="DESCRIPCION_ACTIVIDAD" class="java.lang.String"/>
+	<field name="FECHA" class="java.lang.String"/>
+	<field name="FECHA2" class="java.sql.Date"/>
+	<field name="NUM" class="java.lang.Long"/>
+	<group name="FECHA">
+		<groupExpression><![CDATA[$F{FECHA}]]></groupExpression>
+		<groupHeader>
+			<band height="40">
+				<textField>
+					<reportElement style="SubTitle" x="45" y="13" width="152" height="24" forecolor="#006600" uuid="325516df-cd0f-414e-8afc-1d232a414883"/>
+					<textElement>
+						<font fontName="SansSerif" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{FECHA}]]></textFieldExpression>
+				</textField>
+				<rectangle>
+					<reportElement mode="Opaque" x="0" y="13" width="36" height="24" forecolor="#CCCCCC" backcolor="#CCCCCC" uuid="5687c4f5-5155-40d6-a3e6-6fbe7f8d2aa3"/>
+				</rectangle>
+			</band>
+		</groupHeader>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="70" splitType="Stretch">
+			<staticText>
+				<reportElement style="Title" x="0" y="13" width="263" height="33" uuid="b860ca8f-8f7e-44a8-ab9b-2d908664d19c"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<text><![CDATA[Reporte Actividades]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="SubTitle" x="100" y="46" width="174" height="22" uuid="d6c45d1d-fc9f-41f1-b56c-73048fb6cf7d"/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
+				<text><![CDATA[DIARIO]]></text>
+			</staticText>
+			<image>
+				<reportElement x="356" y="0" width="199" height="46" uuid="b86a0c1f-d0b4-4552-99d5-170c7759e63c"/>
+				<imageExpression><![CDATA[$P{imagePath}]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="8" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="0" width="555" height="1" uuid="a0ca1f65-d86c-4311-8aaa-64d0384ddda3"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="30" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="28" width="555" height="1" uuid="6d89694e-04be-4723-ab2b-d808c72e4af0"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<textField>
+				<reportElement style="Detail" x="185" y="0" width="368" height="28" forecolor="#000099" uuid="2fb92828-d5e7-41c1-848e-78f4d7deef75"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DESCRIPCION_ACTIVIDAD}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement style="Detail" x="2" y="1" width="183" height="27" uuid="4774c0e9-0840-4da9-a509-6d63cb5b69e0"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{FECHA2}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement style="Column header" x="433" y="0" width="80" height="20" uuid="917e7ea9-b85a-4241-abae-f09a17c68d4b"/>
+				<textElement textAlignment="Right">
+					<font fontName="SansSerif" size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement style="Column header" x="513" y="0" width="40" height="20" uuid="6839bee0-9a21-49e8-8842-622b9067a811"/>
+				<textElement>
+					<font fontName="SansSerif" size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement style="Column header" x="0" y="0" width="197" height="20" uuid="40d98236-1683-4e0a-b5b0-da3067d13e70"/>
+				<textElement>
+					<font fontName="SansSerif" size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>
