@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="0" uuid="863b227e-b0aa-4126-a226-5ffa5a0be041">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="27"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Title" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
+	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
+	<style name="Column header" forecolor="#FFFFFF" fontName="Arial" fontSize="12" isBold="true"/>
+	<style name="Detail" fontName="Arial" fontSize="12"/>
+	<parameter name="id_tienda" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="id_inventario" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="nombre_inventario" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="nombre_tienda" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT P.NOMBRE_PRODUCTO,DETUFP.ID_PRODUCTO AS PRODUCTO_INVENTARIO,SUM(DETUFP.CANTIDAD) AS CANTIDAD_INVENTARIO
+,STK.ID_PRODUCTO AS PRODUCTO_STOCK,STK.CANTIDAD AS CANTIDAD_STOCK,SUM(DETUFP.CANTIDAD)-STK.CANTIDAD AS RESULTADO
+FROM DETALLE_UBICACION_FISICA_PRODUCTO DETUFP
+INNER JOIN DETALLE_INVENTARIO_UBICACION_FISICA DTIUF ON
+DETUFP.ID_DETALLE_INVENTARIO_UBICACION_FISICA= DTIUF.ID_DETALLE_INVENTARIO_UBICACION_FISICA
+INNER JOIN INVENTARIO_FISICO IFS ON IFS.ID_INVENTARIO_FISICO=DTIUF.ID_INVENTARIO_FISICO
+INNER JOIN STOCK_PRODUCTO_TIENDA_ORIGEN STK ON STK.ID_PRODUCTO = DETUFP.ID_PRODUCTO
+INNER JOIN PRODUCTO P ON P.ID_PRODUCTO = DETUFP.ID_PRODUCTO
+WHERE IFS.ID_INVENTARIO_FISICO =$P{id_inventario} AND IFS.ID_TIENDA=$P{id_tienda} AND STK.ID_TIENDA_ORIGEN=$P{id_tienda}
+
+GROUP BY P.NOMBRE_PRODUCTO,DETUFP.ID_PRODUCTO,STK.ID_PRODUCTO,STK.CANTIDAD
+
+HAVING SUM(DETUFP.CANTIDAD)-STK.CANTIDAD !=0
+ORDER BY 2]]>
+	</queryString>
+	<field name="NOMBRE_PRODUCTO" class="java.lang.String"/>
+	<field name="PRODUCTO_INVENTARIO" class="java.lang.Integer"/>
+	<field name="CANTIDAD_INVENTARIO" class="java.math.BigDecimal"/>
+	<field name="PRODUCTO_STOCK" class="java.lang.Integer"/>
+	<field name="CANTIDAD_STOCK" class="java.lang.Integer"/>
+	<field name="RESULTADO" class="java.math.BigDecimal"/>
+	<title>
+		<band height="50" splitType="Prevent">
+			<staticText>
+				<reportElement x="469" y="0" width="331" height="46" uuid="49298274-db90-4ea2-ab73-f4a1ebfa18c8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Serif" size="20" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[COMPARAR INVENTARIO FÍSICO]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="25" splitType="Stretch">
+			<frame>
+				<reportElement mode="Opaque" x="97" y="0" width="703" height="25" backcolor="#666666" uuid="6e14933e-5b9f-4056-94fd-ac9708634d46"/>
+				<staticText>
+					<reportElement style="Column header" x="0" y="0" width="372" height="25" uuid="b5b05100-926b-42c7-9aff-dadf18f199a6"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="DejaVu Sans" size="11"/>
+					</textElement>
+					<text><![CDATA[PRODUCTO]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="Column header" x="372" y="0" width="81" height="25" uuid="2844e406-e6f8-48d6-9939-d85876d0d673"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="DejaVu Sans" size="11"/>
+					</textElement>
+					<text><![CDATA[FISICO]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="Column header" x="453" y="0" width="75" height="25" uuid="bd10286f-761d-430f-a7ea-fbc0d8fa94bb"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="DejaVu Sans" size="11"/>
+					</textElement>
+					<text><![CDATA[SISTEMA]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="Column header" x="528" y="0" width="91" height="25" uuid="499f8efe-d150-45c7-b301-cf850394e7e1"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="DejaVu Sans" size="11"/>
+					</textElement>
+					<text><![CDATA[SOBRA]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="Column header" x="619" y="0" width="84" height="25" uuid="ed26e40b-5ade-41a5-a9b3-ddae46d6a630"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="DejaVu Sans" size="11"/>
+					</textElement>
+					<text><![CDATA[FALTA]]></text>
+				</staticText>
+			</frame>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="21" splitType="Stretch">
+			<frame>
+				<reportElement x="97" y="0" width="705" height="21" uuid="ff2a8027-79aa-4654-b1a0-aa37e11f21ca"/>
+				<textField>
+					<reportElement style="Detail" x="0" y="0" width="372" height="15" uuid="347b76d9-7332-466e-921d-16c35ea56116"/>
+					<textElement>
+						<font fontName="SansSerif"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{NOMBRE_PRODUCTO}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="Detail" x="372" y="0" width="81" height="15" uuid="53ad298a-90ac-462e-a08d-a1108e2ed9ec"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="SansSerif"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{CANTIDAD_INVENTARIO}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="Detail" x="453" y="0" width="75" height="15" uuid="151e2642-459d-4db2-b394-343643d29c3e"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="SansSerif"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{CANTIDAD_STOCK}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="Detail" mode="Transparent" x="528" y="0" width="91" height="15" forecolor="#005FD9" uuid="3fdf5341-8ec2-4e9e-958b-b39fc7c7fb31">
+						<printWhenExpression><![CDATA[$F{RESULTADO}.intValueExact()>0]]></printWhenExpression>
+					</reportElement>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="SansSerif" isBold="true" isUnderline="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{RESULTADO}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="Detail" x="619" y="0" width="84" height="15" forecolor="#FF0000" uuid="2e78f774-d155-46ac-92e9-f2d098c861c6">
+						<printWhenExpression><![CDATA[$F{RESULTADO}.intValueExact()<0]]></printWhenExpression>
+					</reportElement>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="SansSerif" isBold="true" isUnderline="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{RESULTADO}]]></textFieldExpression>
+				</textField>
+			</frame>
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="97" y="16" width="705" height="1" uuid="ed2f3541-af34-4960-b32b-ec4d3ce5c6c3"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="39" splitType="Stretch">
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement style="Column header" x="671" y="3" width="131" height="20" forecolor="#000000" uuid="a3d99e34-5f2a-4adc-bf8e-9482d4c07561"/>
+				<textElement textAlignment="Right">
+					<font size="12" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="202" y="3" width="152" height="20" uuid="b9485bea-b3f5-4a7b-b9d9-0c408f246136"/>
+				<textFieldExpression><![CDATA[$P{nombre_tienda}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="429" y="3" width="216" height="20" uuid="8023a51a-85f3-467c-8c21-913bcdfbe713"/>
+				<textFieldExpression><![CDATA[$P{nombre_inventario}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="372" y="3" width="57" height="20" uuid="3305287f-8fd7-4635-9e13-d7821f66e500"/>
+				<text><![CDATA[Inventario:]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

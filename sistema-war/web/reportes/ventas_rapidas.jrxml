@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="0" uuid="9bf3abe9-62ae-41de-8d01-c60d11fdc252">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Title" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
+	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
+	<style name="Column header" forecolor="#FFFFFF" fontName="Arial" fontSize="12" isBold="true"/>
+	<style name="Detail" fontName="Arial" fontSize="12"/>
+	<parameter name="id_venta_rapida" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select VR.FECHA_VENTA,C.NOMBRE_CLIENTE, P.NOMBRE_PRODUCTO,DT.PRECIO_VENTA, DT.CANTIDAD from DETALLE_VENTA_RAPIDA_PRODUCTO DT
+INNER JOIN  VENTA_RAPIDA VR ON DT.ID_VENTA_RAPIDA=VR.ID_VENTA_RAPIDA
+INNER JOIN CLIENTE C ON DT.ID_CLIENTE = C.ID_CLIENTE INNER JOIN PRODUCTO P
+ON DT.ID_PRODUCTO = P.ID_PRODUCTO
+where VR.ID_VENTA_RAPIDA = $P{id_venta_rapida}]]>
+	</queryString>
+	<field name="FECHA_VENTA" class="java.sql.Date"/>
+	<field name="NOMBRE_CLIENTE" class="java.lang.String"/>
+	<field name="NOMBRE_PRODUCTO" class="java.lang.String"/>
+	<field name="PRECIO_VENTA" class="java.math.BigDecimal"/>
+	<field name="CANTIDAD" class="java.lang.Integer"/>
+	<variable name="CANTIDAD_1" class="java.lang.Integer" resetType="Group" resetGroup="FECHA_VENTA" calculation="Sum">
+		<variableExpression><![CDATA[$F{CANTIDAD}]]></variableExpression>
+	</variable>
+	<variable name="PRECIO_VENTA_1" class="java.math.BigDecimal" resetType="Group" resetGroup="FECHA_VENTA" calculation="Sum">
+		<variableExpression><![CDATA[$F{PRECIO_VENTA}]]></variableExpression>
+	</variable>
+	<group name="FECHA_VENTA">
+		<groupExpression><![CDATA[$F{FECHA_VENTA}]]></groupExpression>
+		<groupHeader>
+			<band height="56">
+				<textField pattern="dd/MM/yyyy">
+					<reportElement style="SubTitle" x="49" y="3" width="410" height="24" forecolor="#000000" uuid="1e5e218d-d12d-4f50-92b4-102ead24e2b8"/>
+					<textElement>
+						<font fontName="SansSerif" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{FECHA_VENTA}]]></textFieldExpression>
+				</textField>
+				<rectangle>
+					<reportElement mode="Opaque" x="3" y="3" width="36" height="24" forecolor="#CCCCCC" backcolor="#CCCCCC" uuid="26fe40a6-b881-40fc-bc1d-ed2cf0bc2951"/>
+				</rectangle>
+				<frame>
+					<reportElement mode="Opaque" x="0" y="35" width="555" height="20" backcolor="#666666" uuid="f9b3efcf-0523-4628-90e4-376c8739e3bc"/>
+					<staticText>
+						<reportElement style="Column header" x="0" y="0" width="181" height="15" uuid="e3317192-db6e-4ef3-8ff7-b605d1cbbcc7"/>
+						<textElement textAlignment="Center" verticalAlignment="Middle">
+							<font fontName="SansSerif" size="10"/>
+						</textElement>
+						<text><![CDATA[CLIENTE]]></text>
+					</staticText>
+					<staticText>
+						<reportElement style="Column header" x="181" y="0" width="222" height="15" uuid="7e23f96c-4348-4c52-b2fd-68bd096eac23"/>
+						<textElement textAlignment="Center" verticalAlignment="Middle">
+							<font fontName="SansSerif" size="10"/>
+						</textElement>
+						<text><![CDATA[PRODUCTO]]></text>
+					</staticText>
+					<staticText>
+						<reportElement style="Column header" x="403" y="0" width="67" height="15" uuid="9779ba85-9745-486c-a79a-73264e37878d"/>
+						<textElement textAlignment="Center" verticalAlignment="Middle">
+							<font fontName="SansSerif" size="10"/>
+						</textElement>
+						<text><![CDATA[PRECIO]]></text>
+					</staticText>
+					<staticText>
+						<reportElement style="Column header" x="483" y="0" width="71" height="15" uuid="ca6e676a-e3fa-4628-a19c-78724b602d05"/>
+						<textElement textAlignment="Center" verticalAlignment="Middle">
+							<font fontName="SansSerif" size="10"/>
+						</textElement>
+						<text><![CDATA[CANTIDAD]]></text>
+					</staticText>
+				</frame>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="30">
+				<frame>
+					<reportElement mode="Opaque" x="483" y="0" width="72" height="30" forecolor="#CCCCCC" backcolor="#CCCCCC" uuid="412bd094-b764-4d28-83f2-cd22153420ce"/>
+					<textField>
+						<reportElement x="1" y="6" width="70" height="20" uuid="4b2e297f-081d-4ad8-947b-26c288cdefc2"/>
+						<textElement textAlignment="Center" verticalAlignment="Middle">
+							<font fontName="SansSerif" isBold="true" isItalic="false"/>
+						</textElement>
+						<textFieldExpression><![CDATA[$V{CANTIDAD_1}]]></textFieldExpression>
+					</textField>
+				</frame>
+				<frame>
+					<reportElement mode="Opaque" x="403" y="0" width="66" height="30" forecolor="#CCCCCC" backcolor="#CCCCCC" uuid="b28582e2-ea90-444c-a8ba-eb5d9d3541f4"/>
+					<textField>
+						<reportElement x="1" y="6" width="64" height="20" uuid="58f03e3e-b158-41cd-bc6d-4d6c088eb794"/>
+						<textElement textAlignment="Center" verticalAlignment="Middle">
+							<font fontName="SansSerif" isBold="true"/>
+						</textElement>
+						<textFieldExpression><![CDATA[$V{PRECIO_VENTA_1}]]></textFieldExpression>
+					</textField>
+				</frame>
+			</band>
+		</groupFooter>
+	</group>
+	<title>
+		<band height="55" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="25" splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="21" splitType="Stretch">
+			<frame>
+				<reportElement x="3" y="1" width="552" height="15" uuid="9e0fa943-623b-4029-a48e-80dc67b06b36"/>
+				<textField>
+					<reportElement style="Detail" x="178" y="0" width="222" height="15" uuid="4be9112d-f3c1-47bb-9144-b1f760d2f05a"/>
+					<textElement>
+						<font fontName="SansSerif" size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{NOMBRE_PRODUCTO}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="Detail" x="400" y="0" width="65" height="15" uuid="ec9d021a-5e11-4fcc-ba10-35745a2da1a5"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="SansSerif" size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{PRECIO_VENTA}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="Detail" x="3" y="0" width="175" height="15" uuid="9357d0c5-d000-4c06-b183-99e2dd988976"/>
+					<textElement>
+						<font fontName="SansSerif" size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{NOMBRE_CLIENTE}]]></textFieldExpression>
+				</textField>
+			</frame>
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="3" y="16" width="552" height="1" uuid="a2a09e79-3967-469e-b77a-0e4fcd1c780c"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<textField>
+				<reportElement style="Detail" x="483" y="0" width="72" height="15" uuid="0e5198eb-dbbb-4f7d-9558-34bf3a1b6906"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CANTIDAD}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="100" splitType="Stretch">
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement style="Column header" x="316" y="0" width="239" height="20" forecolor="#000000" uuid="202a7fe4-b756-4612-b928-a46e9f2e4cc1"/>
+				<textElement textAlignment="Right">
+					<font fontName="SansSerif" size="12" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

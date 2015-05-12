@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporte_pagos_ventas_credito_cliente" language="groovy" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="33262b3c-3aa9-4b29-b903-f42fe21a9652">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Title" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
+	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
+	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
+	<style name="Detail" fontName="Arial" fontSize="12"/>
+	<parameter name="id_cliente" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="fecha1" class="java.util.Date"/>
+	<parameter name="fecha2" class="java.util.Date"/>
+	<parameter name="imagePath" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select v.TOTAL_VENTA, v.TOTAL_PAGOS_CREDITO, c.NOMBRE_CLIENTE, pvc.FECHA_INGRESO
+,e.NOMBRE_EMPLEADO, pvc.OBSERVACIONES, pvc.CANTIDAD  from PAGO_VENTA_CREDITO pvc
+inner join VENTA v on v.ID_VENTA = pvc.ID_VENTA inner join CLIENTE c
+on c.ID_CLIENTE = v.ID_CLIENTE
+inner join EMPLEADO e on e.ID_EMPLEADO = v.ID_EMPLEADO
+
+where c.ID_CLIENTE=$P{id_cliente} and
+ pvc.FECHA_INGRESO between $P{fecha1} and $P{fecha2}
+
+
+union
+
+select v.TOTAL_VENTA_INCLUIDO_IGV, v.TOTAL_PAGOS_CREDITO, c.NOMBRE_CLIENTE, pvc.FECHA_INGRESO
+,e.NOMBRE_EMPLEADO, pvc.OBSERVACIONES, pvc.CANTIDAD  from PAGO_FACTURA_VENTA_CREDITO pvc
+inner join FACTURA_VENTA v on v.ID_FACTURA_VENTA = pvc.ID_FACTURA_VENTA inner join CLIENTE c
+on c.ID_CLIENTE = v.ID_CLIENTE
+inner join EMPLEADO e on e.ID_EMPLEADO = v.ID_EMPLEADO
+
+where c.ID_CLIENTE=$P{id_cliente} and
+ pvc.FECHA_INGRESO between $P{fecha1} and $P{fecha2}]]>
+	</queryString>
+	<field name="TOTAL_VENTA" class="java.math.BigDecimal"/>
+	<field name="TOTAL_PAGOS_CREDITO" class="java.math.BigDecimal"/>
+	<field name="NOMBRE_CLIENTE" class="java.lang.String"/>
+	<field name="FECHA_INGRESO" class="java.sql.Date"/>
+	<field name="NOMBRE_EMPLEADO" class="java.lang.String"/>
+	<field name="OBSERVACIONES" class="java.lang.String"/>
+	<field name="CANTIDAD" class="java.math.BigDecimal"/>
+	<group name="NOMBRE_CLIENTE">
+		<groupExpression><![CDATA[$F{TOTAL_VENTA}]]></groupExpression>
+		<groupHeader>
+			<band height="54">
+				<rectangle>
+					<reportElement mode="Opaque" x="0" y="13" width="36" height="24" forecolor="#CCCCCC" backcolor="#CCCCCC" uuid="574363cc-f992-435d-83c6-1be4909fc200"/>
+				</rectangle>
+				<textField>
+					<reportElement style="Detail" x="154" y="15" width="76" height="15" forecolor="#124AAD" uuid="643869f8-2cb0-4eae-9fa7-48ecc3f0ff81"/>
+					<textElement>
+						<font fontName="SansSerif" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{TOTAL_VENTA}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement style="Column header" x="50" y="15" width="50" height="15" uuid="c85b5f39-4371-4ad8-9551-57b2f1168149"/>
+					<textElement>
+						<font fontName="Serif" size="12"/>
+					</textElement>
+					<text><![CDATA[Total Crédito:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="Column header" x="263" y="15" width="145" height="15" uuid="8b590c5c-198c-4a82-9c2d-00258d39341f"/>
+					<textElement>
+						<font fontName="Serif"/>
+					</textElement>
+					<text><![CDATA[Suma de pagos:]]></text>
+				</staticText>
+				<textField>
+					<reportElement style="Detail" x="418" y="15" width="78" height="15" forecolor="#E30F0F" uuid="fd32d964-53b1-4a43-a806-7247e6ff7488"/>
+					<textElement>
+						<font fontName="Serif"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{TOTAL_PAGOS_CREDITO}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement style="Column header" x="50" y="33" width="92" height="15" uuid="1d8a9d16-6f80-43a0-b80e-4d0490c77c17"/>
+					<textElement>
+						<font fontName="SansSerif"/>
+					</textElement>
+					<text><![CDATA[Fecha de Pago]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="Column header" x="198" y="34" width="92" height="15" uuid="32ff0c51-fbe2-4d9d-b742-1ea302876c27"/>
+					<textElement>
+						<font fontName="SansSerif"/>
+					</textElement>
+					<text><![CDATA[Recibido Por]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="Column header" x="329" y="34" width="92" height="15" uuid="8bd22620-dfad-4b24-a117-78cd78d65d0c"/>
+					<textElement>
+						<font fontName="SansSerif"/>
+					</textElement>
+					<text><![CDATA[OBSERVACIONES]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="Column header" x="458" y="33" width="92" height="15" uuid="b34a2ae4-8969-44b6-b509-cfa959b2f1e1"/>
+					<textElement>
+						<font fontName="SansSerif"/>
+					</textElement>
+					<text><![CDATA[CANTIDAD]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="28">
+				<line>
+					<reportElement positionType="FixRelativeToBottom" x="0" y="0" width="555" height="1" uuid="41568f34-0b6d-4a2b-b962-9b14ebba2351"/>
+					<graphicElement>
+						<pen lineWidth="0.5" lineColor="#999999"/>
+					</graphicElement>
+				</line>
+				<line>
+					<reportElement positionType="FixRelativeToBottom" x="0" y="4" width="555" height="1" uuid="ea6c82c1-43ae-4ff4-a513-cade1164c96f"/>
+					<graphicElement>
+						<pen lineWidth="0.5" lineColor="#999999"/>
+					</graphicElement>
+				</line>
+				<textField>
+					<reportElement style="Column header" x="421" y="8" width="80" height="20" uuid="8e9e6218-ab5a-419b-a187-8bf0df57ded5"/>
+					<textElement textAlignment="Right">
+						<font fontName="SansSerif" size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+				</textField>
+				<textField evaluationTime="Report">
+					<reportElement style="Column header" x="501" y="8" width="52" height="20" uuid="d6488646-ba08-4132-bf5d-1437463569c7"/>
+					<textElement>
+						<font fontName="SansSerif" size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="70" splitType="Stretch">
+			<staticText>
+				<reportElement style="Title" x="0" y="13" width="274" height="33" uuid="8bc42d81-b236-46be-913f-3f497aa2df2f"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="24"/>
+				</textElement>
+				<text><![CDATA[XPRESSEG CIA. LTDA.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="SubTitle" x="100" y="46" width="174" height="22" uuid="f55381b4-0a0c-4c29-a2cc-571b486d26be"/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
+				<text><![CDATA[Pago - Clientes]]></text>
+			</staticText>
+			<image>
+				<reportElement x="390" y="0" width="156" height="32" uuid="c67c4b84-05ef-44f2-9890-bad2166b1c7e"/>
+				<imageExpression><![CDATA[$P{imagePath}]]></imageExpression>
+			</image>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement style="Column header" x="358" y="46" width="197" height="20" uuid="384d5d35-12a5-4264-aa23-8829480a509e"/>
+				<textElement>
+					<font fontName="SansSerif" size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="36" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="35" width="555" height="1" uuid="a3e9fad9-fad5-4e2d-b3e5-d356c9a51da9"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement x="50" y="12" width="71" height="20" forecolor="#006600" uuid="b0df4c0e-a978-4ac1-b8f7-b19dc2f61857"/>
+				<textElement>
+					<font fontName="Serif" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cliente :]]></text>
+			</staticText>
+			<textField>
+				<reportElement style="SubTitle" x="168" y="12" width="240" height="20" forecolor="#006600" uuid="6ad992b8-a1d9-4c06-bfae-34b881fc4378"/>
+				<textElement>
+					<font fontName="Serif" size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NOMBRE_CLIENTE}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="21" splitType="Stretch">
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement style="Detail" x="0" y="0" width="154" height="21" uuid="2d7cd688-07d4-4a82-879d-4334fe798507"/>
+				<textElement textAlignment="Center">
+					<font fontName="SansSerif" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{FECHA_INGRESO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="329" y="0" width="119" height="21" uuid="47fb2a8b-75b0-4d7e-a26b-71f718f3ade0"/>
+				<textElement>
+					<font fontName="SansSerif" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{OBSERVACIONES}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="454" y="0" width="92" height="21" uuid="6124d60f-c7b7-4bdb-91da-7f57ffdefdf8"/>
+				<textElement textAlignment="Center">
+					<font fontName="SansSerif" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CANTIDAD}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="186" y="0" width="143" height="21" uuid="1893e0cd-b02b-4e47-a89d-28e54a55a005"/>
+				<textElement>
+					<font fontName="SansSerif" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NOMBRE_EMPLEADO}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>
